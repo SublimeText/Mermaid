@@ -1,0 +1,13 @@
+{
+    "selector" : "source.mermaid",
+    "cmd": [
+        "mmdc",
+        "-i", "$file_name",
+        "-o", "$file_base_name.png",
+        //"-t", "dark",
+        "-b", "transparent",
+        "--width", "2048",
+        "--height", "2048",
+        "--scale", "2",
+    ],
+}

@@ -1,18 +1,12 @@
 # Mermaid (for Sublime)
 
-**This package is no longer maintained. Please check out any forks or alternatives.**
-
-ST4 has been out for a while now, and it's a paid upgrade. Instead of being lavished on tooling and hobby projects, my coding time (maybe from disinterest) has shrunk to focus on work, where VSCode is used. Code, being free and when run on M1, really makes Sublime not seem worth it. And so, if you installed this package, apologies and thank you!
-
 ---
 
-> :tropical_fish: The missing [Sublime Text 3][] package for [Mermaid][].
+> :tropical_fish: The [Sublime Text][] package for [Mermaid][] diagrams.
 
 [Install Mermaid][] from [Package Control][].
 
-- [x] [Flow diagram][] support, with caveats:
-  - Inline node definition isn't supported, plus it does not scale well.
-  - `style` isn't supported, since `class` (CSS) support is easier.
+Install [Mermaid CLI][] if you haven't already, and ensure it is on your `PATH`.
 
 ![screen-shot](https://user-images.githubusercontent.com/100884/37049332-71bfaabc-2125-11e8-8ec3-0202e925a494.png)
 
@@ -86,26 +80,13 @@ sequenceDiagram %% tab completion: 'diagram'
   end
 ```
 
-- [x] Preview in browser
-  - From the Command Palette: `Mermaid: View In Browser`
-  - Defaults to the entire file, unless there is a selection.
-  - Configurable settings: `quiet_graph_links`, `theme`.
-
-- [x] Exporting, with caveats:
-  - PNG conversion from SVG conflicts with opening file-URL's, so it's a link.
-  - Converted SVG may be missing some styling.
-
-- [ ] Gantt diagram support
-- [ ] Windows support
-- [ ] Linux support
-
-[Sublime Text 3]: http://www.sublimetext.com
-[Mermaid]: http://knsv.github.io/mermaid
+[Sublime Text]: http://www.sublimetext.com
+[Mermaid]: https://mermaid.js.org
 [Flow diagram]: https://mermaidjs.github.io/flowchart.html
 [Sequence diagram]: https://mermaidjs.github.io/sequenceDiagram.html
 [Install Mermaid]: https://packagecontrol.io/packages/Mermaid
 [Package Control]: https://packagecontrol.io
-
+[Mermaid CLI]: https://github.com/mermaid-js/mermaid-cli
 ---
 
 Development:
