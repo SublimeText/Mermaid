@@ -201,10 +201,13 @@ contexts:
 
   line_comment:
     - match: '%%'
-      push:
-        - meta_scope: punctuation.definition.comment.mermaid
-        - match: $
-          pop: true
+      scope: punctuation.definition.comment.mermaid
+      push: inside_line_comment
+
+  inside_line_comment:
+    - meta_scope: comment.line.percentage.mermaid
+    - match: $\n?
+      pop: true
 
   quoted_string:
     - match: '"'
