@@ -122,7 +122,7 @@ contexts:
         - match: $
           pop: true
 
-    - match: ^\s*(participant)\s+({{entity}})(?:\s+(as)\s+)?
+    - match: ^\s*(participant|actor)\s+({{entity}})(?:\s+(as)\s+)?
       captures:
         1: keyword.type.actor.diagram.mermaid
         2: entity.name.actor.diagram.mermaid
