@@ -1,12 +1,13 @@
 %YAML 1.2
 ---
-# See http://www.sublimetext.com/docs/3/syntax.html
+# See https://www.sublimetext.com/docs/syntax.html
 name: Mermaid
 file_extensions:
   - mermaid
   - mmd
 scope: source.mermaid
 variables:
+  sequence_graph_link: (?:--?(?:>>|[>)x]))
   graph_link: (?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)
   entity: \b[-\w]+\b
   entity_from: \b{{entity}}\s?
@@ -84,9 +85,10 @@ contexts:
           scope: keyword.type.end.sub.graph.mermaid
           pop: true
 
-    - match: ^\s*{{entity_from}}({{graph_link}})
+    - match: ^\s*({{entity_from}})\s*({{graph_link}})
       captures:
-        1: keyword.operator.link.graph.mermaid
+        1: variable.other.constant.mermaid
+        2: keyword.operator.link.graph.mermaid
       push:
         - meta_scope: meta.declaration.link.graph.mermaid
         - match: (\|)({{text}}|{{text_and_symbols}})(\|)
@@ -99,6 +101,7 @@ contexts:
             1: string.text.link.graph.mermaid
             2: keyword.operator.link.graph.mermaid
         - match: '{{entity_to}}'
+          scope: variable.other.constant.mermaid
           pop: true
 
     - match: ^\s*({{entity}})(\[|\(+|\>|\{)
@@ -116,7 +119,7 @@ contexts:
   diagram:
     - match: ^\s*(sequenceDiagram)\s+
       captures:
-        1: keyword.type.diagram.mermaid
+        1: keyword.declaration.trait.diagram.mermaid
       push:
         - meta_scope: meta.declaration.diagram.mermaid
         - match: $
@@ -124,12 +127,12 @@ contexts:
 
     - match: ^\s*(participant|actor)\s+({{entity}})(?:\s+(as)\s+)?
       captures:
-        1: keyword.type.actor.diagram.mermaid
+        1: storage.type.interface.mermaid
         2: entity.name.actor.diagram.mermaid
-        3: keyword.operator.alias.actor.diagram.mermaid
+        3: keyword.context.resource.mermaid
       push:
         - meta_scope: meta.declaration.actor.diagram.mermaid
-        - meta_content_scope: string.text.alias.actor.diagram.mermaid
+        - meta_content_scope: string.unquoted.alias.actor.diagram.mermaid
         - match: $
           pop: true
 
@@ -154,18 +157,25 @@ contexts:
 
     - match: ^\s*(alt)\s+({{text}})$
       captures:
-        1: keyword.type.begin.alternative-path.diagram.mermaid
-        2: string.text.alternative-path.diagram.mermaid
+        1: keyword.control.conditional.if.mermaid
+        2: meta.alternative-path.diagram.mermaid string.unquoted.mermaid
       push:
         - meta_scope: meta.declaration.alternative-path.diagram.mermaid
         - include: diagram
         - match: ^\s*(else)(?:\s+({{text}}))$
           captures:
-            1: keyword.operator.alternative-path.diagram.mermaid
-            2: string.text.alternative-path.diagram.mermaid
+            1: keyword.control.conditional.else.mermaid
+            2: meta.alternative-path.diagram.mermaid string.unquoted.mermaid
         - match: ^\s*end\b
-          scope: keyword.type.end.alternative-path.diagram.mermaid
+          scope: keyword.control.conditional.end.mermaid
           pop: true
+
+    - match: ^\s*(rect)\b
+      captures:
+        1: keyword.context.block.mermaid
+      push:
+        - inside-rect
+        - expect-rgb
 
     - match: ^\s*(opt)\s+({{text}})$
       captures:
@@ -178,26 +188,45 @@ contexts:
           scope: keyword.type.end.optional-path.diagram.mermaid
           pop: true
 
-    - match: ^\s*(Note)\s+((?:left|right)\sof|over)\s+{{entity}}(:)
+    - match: (?i)^\s*(Note)\s+((?:left|right)\sof|over)\s+({{entity}}(?:,\s*{{entity}})*)(:)
       captures:
+        0: meta.declaration.note.diagram.mermaid
         1: keyword.type.note.diagram.mermaid
-        2: constant.type.note.diagram.mermaid
-        3: keyword.operator.note.diagram.mermaid
-      push:
-        - meta_scope: meta.declaration.note.diagram.mermaid
-        - meta_content_scope: string.text.note.diagram.mermaid
-        - match: $
-          pop: true
+        2: constant.language.note.diagram.mermaid
+        3: variable.parameter.mermaid
+        4: punctuation.separator.key-value.mermaid
+      #embed: scope:text.html.basic
+      embed: note_text
+      embed_scope: meta.declaration.note.diagram.mermaid
+      escape: $
 
-    - match: ^\s*{{entity_from}}(-?-(?:\>|x)\>?[+-]?){{entity_to}}(:)
+    - match: ^\s*({{entity_from}})\s*({{sequence_graph_link}}[+-]?)\s*({{entity_to}})(:)
       captures:
-        1: keyword.operator.message.diagram.mermaid
+        0: meta.declaration.message.diagram.mermaid
+        1: variable.parameter.mermaid
         2: keyword.operator.message.diagram.mermaid
-      push:
-        - meta_scope: meta.declaration.message.diagram.mermaid
-        - meta_content_scope: string.text.message.diagram.mermaid
-        - match: $
-          pop: true
+        3: variable.parameter.mermaid
+        4: punctuation.separator.key-value.mermaid
+      #embed: scope:text.html.basic
+      embed: message_text
+      embed_scope: meta.declaration.message.diagram.mermaid
+      escape: $
+      # push:
+      #   - meta_scope: meta.declaration.message.diagram.mermaid
+      #   - meta_content_scope: string.unquoted.mermaid
+      #   - match: $
+      #     pop: true
+
+    - match: ^\s*(autonumber)\b
+      scope: keyword.other.mermaid
+
+  note_text:
+    - match: ''
+      push: scope:text.html.basic
+
+  message_text:
+    - match: ''
+      push: scope:text.html.basic
 
   line_comment:
     - match: '%%'
@@ -217,3 +246,36 @@ contexts:
         - match: '"'
           scope: punctuation.definition.string.end.mermaid
           pop: true
+
+  expect-rgb:
+    - match: \b(rgba?)\s*(\()
+      captures:
+        1: meta.function-call.identifier.mermaid support.function.mermaid
+        2: meta.function-call.arguments.mermaid punctuation.section.parens.begin.mermaid
+      set: rgb-values
+    - match: $
+      pop: true
+
+  rgb-values:
+    - meta_content_scope: meta.function-call.arguments.mermaid
+    - match: (\d*(\.)\d+)
+      captures:
+        0: meta.number.float.decimal.mermaid
+        1: constant.numeric.value.mermaid
+        2: punctuation.separator.decimal.mermaid
+    - match: \d+
+      scope: meta.number.integer.decimal.mermaid constant.numeric.value.mermaid
+    - match: ','
+      scope: punctuation.separator.sequence.mermaid
+    - match: \)
+      scope: meta.function-call.arguments.mermaid punctuation.section.parens.end.mermaid
+      pop: true
+    - match: $
+      pop: true
+
+  inside-rect:
+    - meta_scope: meta.block.mermaid
+    - include: diagram
+    - match: ^\s*end\b
+      scope: keyword.context.block.mermaid
+      pop: true
