@@ -6,11 +6,9 @@ scope: source.mermaid.flowchart
 extends: Packages/Mermaid/mermaid.sublime-syntax
 version: 2
 variables:
-  sequence_graph_link: (?:--?(?:>>|[>)x]))
-  other_graph_link: (?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)
-  graph_link: (?:{{sequence_graph_link}}|{{other_graph_link}})
+  graph_link: (?:(?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)|~~~)
   entity: \b[-\w]+\b
-  text: \b[-\w\s]+\b
+  text: \b[-\w\s!]+
   # TODO: untested, test breaks, despite highlight working
   text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
 contexts:
@@ -76,7 +74,34 @@ contexts:
     - include: maybe-graph-link
 
   maybe-graph-link:
-    - match: '{{graph_link}}'
+    # Length  1 2 3
+    # Normal  --- ----  -----
+    # Normal with arrow --> --->  ---->
+    # Thick === ====  =====
+    # Thick with arrow  ==> ===>  ====>
+    # Dotted  -.- -..-  -...-
+    # Dotted with arrow -.->  -..-> -...->
+    - match: |-
+        (?x:
+          (?:-{3,})
+        | (?:-{2,}>)
+        | (?:={3,})
+        | (?:={2,}>)
+        | (?:-\.+->?)
+        | (?:~{3,})
+        )
+      scope: keyword.operator.link.graph.mermaid
+      set:
+        - node
+        - maybe-link-text
+    - match: |-
+        (?x:
+          (?:--)\s*{{text}}\s*(?:-{3,})
+        | (?:--)\s*{{text}}\s*(?:-{2,}>)
+        | (?:==)\s*{{text}}\s*(?:={3,})
+        | (?:==)\s*{{text}}\s*(?:={2,}>)
+        | (?:-\.)\s*{{text}}\s*(?:\.+->)
+        )
       scope: keyword.operator.link.graph.mermaid
       set:
         - node
@@ -91,11 +116,11 @@ contexts:
         2: string.unquoted.link.graph.mermaid
         3: keyword.operator.end.text.link.graph.mermaid
       pop: 1
-    - match: ({{text}}|{{text_and_symbols}})\s?({{graph_link}})
-      captures:
-        1: string.unquoted.link.graph.mermaid
-        2: keyword.operator.link.graph.mermaid
-      pop: 1
+    # - match: ({{text}}|{{text_and_symbols}})\s?({{graph_link}})
+    #   captures:
+    #     1: string.unquoted.link.graph.mermaid
+    #     2: keyword.operator.link.graph.mermaid
+    #   pop: 1
     - match: $|(?=\S)
       pop: 1
 

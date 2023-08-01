@@ -70,10 +70,24 @@ class nodeId1,nodeId2 className;
 %%                                         ^ - meta.declaration
 
 B --> C{Decision}
+%% <- meta.node-name.mermaid variable.parameter.mermaid
+%%^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+%%    ^ meta.node-name.mermaid variable.parameter.mermaid
+%%     ^ keyword.operator.begin.node.graph.mermaid
+%%      ^^^^^^^^ string.unquoted.node.graph.mermaid
+%%              ^ keyword.operator.end.node.graph.mermaid
 C -->|One| D[Result one]
 C -->|Two| E[Result two]
 
 Start((Start)) ~~~ Something;
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^^^^^^^^ meta.declaration.node.graph.mermaid
+%%   ^^ keyword.operator.begin.node.graph.mermaid
+%%     ^^^^^ string.unquoted.node.graph.mermaid
+%%          ^^ keyword.operator.end.node.graph.mermaid
+%%             ^^^ keyword.operator.link.graph.mermaid
+%%                 ^^^^^^^^^ meta.node-name.mermaid variable.parameter.mermaid
+%%                          ^ punctuation.terminator.flowchart
 Something -..-> | Meanwhile | A;
 E --> F{Do we have all data<br />that we need?};
 F --> |Yes| G([Do something])
@@ -98,6 +112,8 @@ subgraph example
   id1(((This is the text in the double circle)))
 
   A-- This is the text! ---B
+  %%                    ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+  %%                       ^ meta.node-name.mermaid variable.parameter.mermaid
   A---|This is the text|B
   A-->|text|B
   A-- text -->B
