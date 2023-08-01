@@ -39,7 +39,7 @@ contexts:
     - match: (?i)^\s*(loop)\s+(.*)$
       captures:
         1: keyword.type.begin.loop.diagram.mermaid
-        2: string.text.loop.diagram.mermaid
+        2: string.unquoted.loop.diagram.mermaid
       push:
         - meta_scope: meta.declaration.loop.diagram.mermaid
         - include: main
@@ -72,7 +72,7 @@ contexts:
     - match: (?i)^\s*(opt|break)\s+(.*)$
       captures:
         1: keyword.type.begin.optional-path.diagram.mermaid
-        2: string.text.optional-path.diagram.mermaid
+        2: string.unquoted.optional-path.diagram.mermaid
       push:
         - meta_scope: meta.declaration.optional-path.diagram.mermaid
         - include: main

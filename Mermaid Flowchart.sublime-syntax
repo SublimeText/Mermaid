@@ -35,7 +35,7 @@ contexts:
     - match: ^\s*(subgraph)\s+(.*)$
       captures:
         1: keyword.type.begin.sub.graph.mermaid
-        2: string.text.sub.graph.mermaid
+        2: string.unquoted.sub.graph.mermaid
       push:
         - meta_scope: meta.declaration.sub.graph.mermaid
         - include: main
@@ -43,18 +43,24 @@ contexts:
           scope: keyword.type.end.sub.graph.mermaid
           pop: true
 
-    - match: ^\s*({{entity}})
-      captures:
-        1: meta.node-name.mermaid variable.parameter.mermaid
+    - match: ^\s*(?={{entity}})
+      push:
+        - node
+
+  node:
+    - match: '{{entity}}'
+      scope: meta.node-name.mermaid variable.parameter.mermaid
       push:
         - maybe-node-declaration
+    - match: $
+      pop: 1
 
   maybe-node-declaration:
     - match: '\[|\(+|\>|\{'
       scope: keyword.operator.begin.node.graph.mermaid
       set:
         - meta_scope: meta.declaration.node.graph.mermaid
-        - meta_content_scope: string.text.node.graph.mermaid
+        - meta_content_scope: string.unquoted.node.graph.mermaid
         - match: (\]|\)+|\})(?=\b|\s|$)
           captures:
             1: keyword.operator.end.node.graph.mermaid
@@ -73,27 +79,24 @@ contexts:
     - match: '{{graph_link}}'
       scope: keyword.operator.link.graph.mermaid
       set:
-        - expect-target-node
+        - node
         - maybe-link-text
+    - match: $
+      pop: 1
 
   maybe-link-text:
     - match: (\|)({{text}}|{{text_and_symbols}})(\|)
       captures:
         1: keyword.operator.begin.text.link.graph.mermaid
-        2: string.text.link.graph.mermaid
+        2: string.unquoted.link.graph.mermaid
         3: keyword.operator.end.text.link.graph.mermaid
       pop: 1
     - match: ({{text}}|{{text_and_symbols}})\s?({{graph_link}})
       captures:
-        1: string.text.link.graph.mermaid
+        1: string.unquoted.link.graph.mermaid
         2: keyword.operator.link.graph.mermaid
       pop: 1
     - match: $|(?=\S)
-      pop: 1
-
-  expect-target-node:
-    - match: '{{entity}}'
-      scope: meta.node-name.mermaid variable.parameter.mermaid
       pop: 1
 
   style:

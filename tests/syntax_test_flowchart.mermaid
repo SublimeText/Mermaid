@@ -51,7 +51,24 @@ class nodeId1,nodeId2 className;
 %%            ^^^^^^^ variable.parameter.flowchart
 %%                    ^^^^^^^^^ support.name.styling.graph.mermaid
 
-A[Hard edge] -->|Link text| B(Round edge)
+  A[Hard edge] -->|Link text| B(Round edge)
+%%^ meta.node-name.mermaid variable.parameter.mermaid
+%% ^^^^^^^^^^^ meta.declaration.node.graph.mermaid
+%% ^ keyword.operator.begin.node.graph.mermaid
+%%  ^^^^^^^^^ string.unquoted.node.graph.mermaid
+%%           ^ keyword.operator.end.node.graph.mermaid
+%%            ^ - meta.declaration
+%%             ^^^ keyword.operator.link.graph.mermaid
+%%                ^ keyword.operator.begin.text.link.graph.mermaid
+%%                 ^^^^^^^^^ string.unquoted.link.graph.mermaid
+%%                          ^ keyword.operator.end.text.link.graph.mermaid
+%%                            ^ meta.node-name.mermaid variable.parameter.mermaid
+%%                             ^^^^^^^^^^^^ meta.declaration.node.graph.mermaid
+%%                             ^ keyword.operator.begin.node.graph.mermaid
+%%                              ^^^^^^^^^^ string.unquoted.node.graph.mermaid
+%%                                        ^ keyword.operator.end.node.graph.mermaid
+%%                                         ^ - meta.declaration
+
 B --> C{Decision}
 C -->|One| D[Result one]
 C -->|Two| E[Result two]
