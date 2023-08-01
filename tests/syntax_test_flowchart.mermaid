@@ -137,6 +137,15 @@ end
     C --> D[Rethink]
     D --> B
     B ---->|No| E[End]
+%%  ^ meta.node-name.mermaid variable.parameter.mermaid
+%%    ^^^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+%%         ^ keyword.operator.begin.text.link.graph.mermaid
+%%          ^^ string.unquoted.link.graph.mermaid
+%%            ^ keyword.operator.end.text.link.graph.mermaid
+%%              ^ meta.node-name.mermaid variable.parameter.mermaid
+%%               ^ keyword.operator.begin.node.graph.mermaid
+%%                ^^^ string.unquoted.node.graph.mermaid
+%%                   ^ keyword.operator.end.node.graph.mermaid
 
     A[Start] --> B{Is it?}
     B -- Yes --> C[OK]
