@@ -10,8 +10,6 @@ variables:
   other_graph_link: (?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)
   graph_link: (?:{{sequence_graph_link}}|{{other_graph_link}})
   entity: \b[-\w]+\b
-  entity_from: \b{{entity}}\s?
-  entity_to: \s?{{entity}}\b
   text: \b[-\w\s]+\b
   # TODO: untested, test breaks, despite highlight working
   text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
@@ -45,36 +43,58 @@ contexts:
           scope: keyword.type.end.sub.graph.mermaid
           pop: true
 
-    - match: ^\s*({{entity_from}})\s*({{graph_link}})
+    - match: ^\s*({{entity}})
       captures:
-        1: variable.other.constant.mermaid
-        2: keyword.operator.link.graph.mermaid
+        1: meta.node-name.mermaid variable.parameter.mermaid
       push:
-        - meta_scope: meta.declaration.link.graph.mermaid
-        - match: (\|)({{text}}|{{text_and_symbols}})(\|)
-          captures:
-            1: keyword.operator.begin.text.link.graph.mermaid
-            2: string.text.link.graph.mermaid
-            3: keyword.operator.end.text.link.graph.mermaid
-        - match: \s?({{text}}|{{text_and_symbols}})\s?({{graph_link}})
-          captures:
-            1: string.text.link.graph.mermaid
-            2: keyword.operator.link.graph.mermaid
-        - match: '{{entity_to}}'
-          scope: variable.other.constant.mermaid
-          pop: true
+        - maybe-node-declaration
 
-    - match: ^\s*({{entity}})(\[|\(+|\>|\{)
-      captures:
-        1: entity.name.node.graph.mermaid
-        2: keyword.operator.begin.node.graph.mermaid
-      push:
+  maybe-node-declaration:
+    - match: '\[|\(+|\>|\{'
+      scope: keyword.operator.begin.node.graph.mermaid
+      set:
         - meta_scope: meta.declaration.node.graph.mermaid
         - meta_content_scope: string.text.node.graph.mermaid
-        - match: (\]|\)+|\})(\b|\s|$)
+        - match: (\]|\)+|\})(?=\b|\s|$)
           captures:
             1: keyword.operator.end.node.graph.mermaid
-          pop: true
+          set: maybe-graph-link
+    - match: ':::'
+      scope: punctuation.accessor.double-colon.flowchart
+      push: class-expect-class-name
+    - match: ''
+      set: expect-graph-link
+
+  expect-graph-link:
+    - meta_scope: meta.declaration.link.graph.mermaid
+    - include: maybe-graph-link
+
+  maybe-graph-link:
+    - match: '{{graph_link}}'
+      scope: keyword.operator.link.graph.mermaid
+      set:
+        - expect-target-node
+        - maybe-link-text
+
+  maybe-link-text:
+    - match: (\|)({{text}}|{{text_and_symbols}})(\|)
+      captures:
+        1: keyword.operator.begin.text.link.graph.mermaid
+        2: string.text.link.graph.mermaid
+        3: keyword.operator.end.text.link.graph.mermaid
+      pop: 1
+    - match: ({{text}}|{{text_and_symbols}})\s?({{graph_link}})
+      captures:
+        1: string.text.link.graph.mermaid
+        2: keyword.operator.link.graph.mermaid
+      pop: 1
+    - match: $|(?=\S)
+      pop: 1
+
+  expect-target-node:
+    - match: '{{entity}}'
+      scope: meta.node-name.mermaid variable.parameter.mermaid
+      pop: 1
 
   style:
     - match: ^\s*(class)\s+
@@ -113,8 +133,7 @@ contexts:
   class-expect-class-name:
     - match: '{{entity}}'
       scope: support.name.styling.graph.mermaid
-    - match: (?=;)
       pop: 1
     - match: $
-      pop: true
+      pop: 1
 

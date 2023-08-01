@@ -85,7 +85,7 @@ contexts:
         0: meta.declaration.note.diagram.mermaid
         1: keyword.type.note.diagram.mermaid
         2: constant.language.note.diagram.mermaid
-        3: variable.parameter.mermaid
+        3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
       #embed: scope:text.html.basic
       embed: note_text
@@ -95,9 +95,9 @@ contexts:
     - match: ^\s*({{entity_from}})\s*({{sequence_graph_link}}[+-]?)\s*({{entity_to}})(:)
       captures:
         0: meta.declaration.message.diagram.mermaid
-        1: variable.parameter.mermaid
+        1: meta.node-name.mermaid variable.parameter.mermaid
         2: keyword.operator.message.diagram.mermaid
-        3: variable.parameter.mermaid
+        3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
       #embed: scope:text.html.basic
       embed: message_text
