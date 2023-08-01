@@ -1,0 +1,23 @@
+%YAML 1.2
+---
+scope: source.css.mermaid
+version: 2
+extends: Packages/CSS/CSS.sublime-syntax
+
+contexts:
+  rule-terminators:
+    - meta_prepend: true
+    - match: ','
+      scope: punctuation.terminator.rule.css.mermaid
+
+  terminator-pop:
+    - meta_prepend: true
+    - match: (?=,)
+      pop: true
+
+  inside-property-list:
+    # depending on the version of ST (syntax packages) being used,
+    # the context may have a different name
+    # so we include them both here for backwards/forwards compatibility
+    - include: property-list-content
+    - include: property-list-body

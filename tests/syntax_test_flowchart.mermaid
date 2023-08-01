@@ -1,0 +1,153 @@
+%% SYNTAX TEST "Packages/Mermaid/mermaid.sublime-syntax"
+
+%% Example code
+%% <- punctuation.definition.comment.mermaid
+%% ^^^^^^^^^^^^^ comment.line.percentage.mermaid
+
+%% -----------------------------------------------------------------
+
+%%{ init: { 'flowchart': { 'curve': 'stepBefore' } } }%%
+%% <- comment.line.percentage.mermaid punctuation.definition.comment.mermaid
+%%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.js meta.block.js
+%%^ punctuation.section.block.begin.js
+%%  ^^^^ entity.name.label.js
+%%                                                    ^^ punctuation.definition.comment.end.mermaid - source.js
+flowchart LR
+%% ^^^^^^ meta.declaration.graph.mermaid keyword.declaration.graph.mermaid
+%%        ^^ meta.declaration.graph.mermaid constant.language.graph-direction.mermaid
+
+classDef default fill:#f9f,stroke:#333,stroke-width:4px;
+%% ^^^^^ keyword.declaration.styling.graph.mermaid
+%%       ^^^^^^^ entity.name.constant.styling.graph.mermaid
+%%               ^^^^ meta.property-name.css support.type.property-name.css
+%%                   ^ punctuation.separator.key-value.css
+%%                    ^^^^ meta.property-value.css constant.other.color.rgb-value.css
+%%                        ^ punctuation.terminator.rule.css.mermaid
+%%                         ^^^^^^ meta.property-name.css support.type.property-name.css
+%%                                                     ^ punctuation.terminator.rule.css
+%%                                                      ^ - meta.property-list - source.css
+
+A:::someclass --> B
+classDef someclass fill:#f96
+
+style id1 fill:#f9f,stroke:#333,stroke-width:4px
+%% ^^ keyword.declaration.styling.graph.mermaid
+%%    ^^^ variable.parameter.graph.mermaid
+%%                                              ^ - meta.property-list - source.css
+style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+classDef className fill:#f9f,stroke:#333,stroke-width:4px;
+class nodeId1 className
+class nodeId1,nodeId2 className;
+
+A[Hard edge] -->|Link text| B(Round edge)
+B --> C{Decision}
+C -->|One| D[Result one]
+C -->|Two| E[Result two]
+
+Start((Start)) ~~~ Something;
+Something -..-> | Meanwhile | A;
+E --> F{Do we have all data<br />that we need?};
+F --> |Yes| G([Do something])
+
+subgraph example
+  
+  markdown["`This **is** _Markdown_`"]
+  newLines["`Line1
+  Line 2
+  Line 3`"]
+  markdown --> newLines
+
+  id1[(Database)]
+  id1[[This is the text in the box]]
+  id1((This is the text in the circle))
+  id1>This is the text in the asymmetric box]
+  id1{This is the text in the rhombus}
+  id1{{This is the text in the hexagon}}
+  A[/Trapezoid\]
+  B[\Go shopping/]
+  id1(((This is the text in the double circle)))
+
+  A-- This is the text! ---B
+  A---|This is the text|B
+  A-->|text|B
+  A-- text -->B
+  A-.->B;
+  A-. text .-> B
+  A ==> B
+  A == text ==> B
+  A -- text --> B -- text2 --> C
+  a --> b & c--> d
+  A & B--> C & D
+  A --o B
+  B --x C
+  A o--o B
+  B <--> C
+  C x--x D
+
+end
+
+    A[Start] --> B{Is it?}
+    B -->|Yes| C[OK]
+    C --> D[Rethink]
+    D --> B
+    B ---->|No| E[End]
+
+    A[Start] --> B{Is it?}
+    B -- Yes --> C[OK]
+    C --> D[Rethink]
+    D --> B
+    B -- No ----> E[End]
+
+    id1["This is the (text) in the box"]
+    A["A double quote:#quot;"] -->B["A dec char:#9829;"]
+
+flowchart TB
+    c1-->a2
+    subgraph ide1 [one]
+    a1-->a2
+    end
+
+flowchart LR
+  subgraph TOP
+    direction TB
+    subgraph B1
+        direction RL
+        i1 -->f1
+    end
+    subgraph B2
+        direction BT
+        i2 -->f2
+    end
+  end
+  A --> TOP --> B
+  B1 --> B2
+
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+subgraph "One"
+  a("`The **cat**
+  in the hat`") -- "edge label" --> b{{"`The **dog** in the hog`"}}
+end
+subgraph "`**Two**`"
+  c("`The **cat**
+  in the hat`") -- "`Bold **edge label**`" --> d("The dog in the hog")
+end
+
+flowchart LR
+    A-->B
+    B-->C
+    C-->D
+    click A callback "Tooltip for a callback"
+    click B "https://www.github.com" "This is a tooltip for a link"
+    click A call callback() "Tooltip for a callback"
+    click B href "https://www.github.com" "This is a tooltip for a link"
+
+flowchart LR
+    A-->B
+    B-->C
+    C-->D
+    D-->E
+    click A "https://www.github.com" _self
+    click B "https://www.github.com" "Open this top" _top
+    click C href "https://www.github.com" _parent
+    click D href "https://www.github.com" "Open this in a new tab" _blank

@@ -6,20 +6,15 @@ file_extensions:
   - mermaid
   - mmd
 scope: source.mermaid
-variables:
-  sequence_graph_link: (?:--?(?:>>|[>)x]))
-  graph_link: (?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)
-  entity: \b[-\w]+\b
-  entity_from: \b{{entity}}\s?
-  entity_to: \s?{{entity}}\b
-  text: \b[-\w\s]+\b
-  # TODO: untested, test breaks, despite highlight working
-  text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
+version: 2
 contexts:
   prototype:
     - include: line_comment
 
   main:
+    - meta_include_prototype: false
+    - include: preprocessor_comments
+    - include: line_comment
     - match: <
       push:
         - meta_scope: punctuation.definition.comment.mermaid.html
@@ -28,197 +23,38 @@ contexts:
 
     - include: quoted_string
 
-    - include: diagram
-
-    - include: graph
-
-  graph:
-    - match: ^\s*(class)\s+{{entity}}\s+
-      captures:
-        1: keyword.type.styling.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.styling.graph.mermaid
-        - match: \b\w+\b
-          scope: support.name.styling.graph.mermaid
-        - match: $
-          pop: true
-
-    - match: ^\s*(classDef)\s+({{entity}})\s+
-      captures:
-        1: keyword.type.styling.graph.mermaid
-        2: entity.name.styling.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.styling.graph.mermaid
-        - meta_content_scope: string.text.styling.graph.mermaid
-        - match: $
-          pop: true
-
-    - match: ^\s*(click)\s+{{entity}}\s+
-      captures:
-        1: keyword.type.interaction.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.interaction.graph.mermaid
-        - match: \b\w+\b
-          scope: entity.name.callback.interaction.graph.mermaid
-        - include: quoted_string
-        - match: $
-          pop: true
-
-    - match: ^\s*(graph)\s+
-      captures:
-        1: keyword.type.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.graph.mermaid
-        - match: \b(T(B|D)|BT|LR|RL)\b
-          scope: constant.type.graph.mermaid
-        - match: $
-          pop: true
-
-    - match: ^\s*(subgraph)\s+({{text}})$
-      captures:
-        1: keyword.type.begin.sub.graph.mermaid
-        2: string.text.sub.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.sub.graph.mermaid
-        - include: main
-        - match: ^\s*end\b
-          scope: keyword.type.end.sub.graph.mermaid
-          pop: true
-
-    - match: ^\s*({{entity_from}})\s*({{graph_link}})
-      captures:
-        1: variable.other.constant.mermaid
-        2: keyword.operator.link.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.link.graph.mermaid
-        - match: (\|)({{text}}|{{text_and_symbols}})(\|)
-          captures:
-            1: keyword.operator.begin.text.link.graph.mermaid
-            2: string.text.link.graph.mermaid
-            3: keyword.operator.end.text.link.graph.mermaid
-        - match: \s?({{text}}|{{text_and_symbols}})\s?({{graph_link}})
-          captures:
-            1: string.text.link.graph.mermaid
-            2: keyword.operator.link.graph.mermaid
-        - match: '{{entity_to}}'
-          scope: variable.other.constant.mermaid
-          pop: true
-
-    - match: ^\s*({{entity}})(\[|\(+|\>|\{)
-      captures:
-        1: entity.name.node.graph.mermaid
-        2: keyword.operator.begin.node.graph.mermaid
-      push:
-        - meta_scope: meta.declaration.node.graph.mermaid
-        - meta_content_scope: string.text.node.graph.mermaid
-        - match: (\]|\)+|\})(\b|\s|$)
-          captures:
-            1: keyword.operator.end.node.graph.mermaid
-          pop: true
-
-  diagram:
-    - match: ^\s*(sequenceDiagram)\s+
+    - match: (?-i)^\s*(sequenceDiagram)\s+
       captures:
         1: keyword.declaration.trait.diagram.mermaid
       push:
         - meta_scope: meta.declaration.diagram.mermaid
         - match: $
-          pop: true
-
-    - match: ^\s*(participant|actor)\s+({{entity}})(?:\s+(as)\s+)?
+          set: scope:source.mermaid.sequence
+    - match: ^\s*(graph|flowchart)\s+
       captures:
-        1: storage.type.interface.mermaid
-        2: entity.name.actor.diagram.mermaid
-        3: keyword.context.resource.mermaid
+        1: keyword.declaration.graph.mermaid
       push:
-        - meta_scope: meta.declaration.actor.diagram.mermaid
-        - meta_content_scope: string.unquoted.alias.actor.diagram.mermaid
+        - meta_scope: meta.declaration.graph.mermaid
+        - match: \b(?:T[BD]|BT|LR|RL)\b
+          scope: constant.language.graph-direction.mermaid
         - match: $
-          pop: true
+          set: scope:source.mermaid.flowchart
 
-    - match: ^\s*((?:de)?activate)\s+{{entity}}
+  preprocessor_comments:
+    - match: '^\s*(%%)(?={)'
       captures:
-        1: keyword.type.activation.diagram.mermaid
-      push:
-        - meta_scope: meta.declaration.activation.diagram.mermaid
-        - match: $
-          pop: true
+        1: punctuation.definition.comment.mermaid
+      push: inside_preprocessor_comment
 
-    - match: ^\s*(loop)\s+({{text}})$
-      captures:
-        1: keyword.type.begin.loop.diagram.mermaid
-        2: string.text.loop.diagram.mermaid
-      push:
-        - meta_scope: meta.declaration.loop.diagram.mermaid
-        - include: diagram
-        - match: ^\s*end\b
-          scope: keyword.type.end.loop.diagram.mermaid
-          pop: true
-
-    - match: ^\s*(alt)\s+({{text}})$
-      captures:
-        1: keyword.control.conditional.if.mermaid
-        2: meta.alternative-path.diagram.mermaid string.unquoted.mermaid
-      push:
-        - meta_scope: meta.declaration.alternative-path.diagram.mermaid
-        - include: diagram
-        - match: ^\s*(else)(?:\s+({{text}}))$
-          captures:
-            1: keyword.control.conditional.else.mermaid
-            2: meta.alternative-path.diagram.mermaid string.unquoted.mermaid
-        - match: ^\s*end\b
-          scope: keyword.control.conditional.end.mermaid
-          pop: true
-
-    - match: ^\s*(rect)\b
-      captures:
-        1: keyword.context.block.mermaid
-      push:
-        - inside-rect
-        - expect-rgb
-
-    - match: ^\s*(opt)\s+({{text}})$
-      captures:
-        1: keyword.type.begin.optional-path.diagram.mermaid
-        2: string.text.optional-path.diagram.mermaid
-      push:
-        - meta_scope: meta.declaration.optional-path.diagram.mermaid
-        - include: diagram
-        - match: ^\s*end\b
-          scope: keyword.type.end.optional-path.diagram.mermaid
-          pop: true
-
-    - match: (?i)^\s*(Note)\s+((?:left|right)\sof|over)\s+({{entity}}(?:,\s*{{entity}})*)(:)
-      captures:
-        0: meta.declaration.note.diagram.mermaid
-        1: keyword.type.note.diagram.mermaid
-        2: constant.language.note.diagram.mermaid
-        3: variable.parameter.mermaid
-        4: punctuation.separator.key-value.mermaid
-      #embed: scope:text.html.basic
-      embed: note_text
-      embed_scope: meta.declaration.note.diagram.mermaid
-      escape: $
-
-    - match: ^\s*({{entity_from}})\s*({{sequence_graph_link}}[+-]?)\s*({{entity_to}})(:)
-      captures:
-        0: meta.declaration.message.diagram.mermaid
-        1: variable.parameter.mermaid
-        2: keyword.operator.message.diagram.mermaid
-        3: variable.parameter.mermaid
-        4: punctuation.separator.key-value.mermaid
-      #embed: scope:text.html.basic
-      embed: message_text
-      embed_scope: meta.declaration.message.diagram.mermaid
-      escape: $
-      # push:
-      #   - meta_scope: meta.declaration.message.diagram.mermaid
-      #   - meta_content_scope: string.unquoted.mermaid
-      #   - match: $
-      #     pop: true
-
-    - match: ^\s*(autonumber)\b
-      scope: keyword.other.mermaid
+  inside_preprocessor_comment:
+    - meta_scope: comment.line.percentage.mermaid
+    - match: ''
+      embed: scope:source.js
+      escape: (%%)?$
+      escape_captures:
+        1: punctuation.definition.comment.end.mermaid
+      pop: 1
+    #- match: '' # basis, bumpX, bumpY, cardinal, catmullRom, linear, monotoneX, monotoneY, natural, step, stepAfter, and stepBefore.
 
   note_text:
     - match: ''
@@ -229,8 +65,9 @@ contexts:
       push: scope:text.html.basic
 
   line_comment:
-    - match: '%%'
-      scope: punctuation.definition.comment.mermaid
+    - match: '^\s*(%%)'
+      captures:
+        1: punctuation.definition.comment.mermaid
       push: inside_line_comment
 
   inside_line_comment:
@@ -246,36 +83,3 @@ contexts:
         - match: '"'
           scope: punctuation.definition.string.end.mermaid
           pop: true
-
-  expect-rgb:
-    - match: \b(rgba?)\s*(\()
-      captures:
-        1: meta.function-call.identifier.mermaid support.function.mermaid
-        2: meta.function-call.arguments.mermaid punctuation.section.parens.begin.mermaid
-      set: rgb-values
-    - match: $
-      pop: true
-
-  rgb-values:
-    - meta_content_scope: meta.function-call.arguments.mermaid
-    - match: (\d*(\.)\d+)
-      captures:
-        0: meta.number.float.decimal.mermaid
-        1: constant.numeric.value.mermaid
-        2: punctuation.separator.decimal.mermaid
-    - match: \d+
-      scope: meta.number.integer.decimal.mermaid constant.numeric.value.mermaid
-    - match: ','
-      scope: punctuation.separator.sequence.mermaid
-    - match: \)
-      scope: meta.function-call.arguments.mermaid punctuation.section.parens.end.mermaid
-      pop: true
-    - match: $
-      pop: true
-
-  inside-rect:
-    - meta_scope: meta.block.mermaid
-    - include: diagram
-    - match: ^\s*end\b
-      scope: keyword.context.block.mermaid
-      pop: true

@@ -1,0 +1,106 @@
+%% SYNTAX TEST "Packages/Mermaid/mermaid.sublime-syntax"
+
+%% Example code
+%% <- punctuation.definition.comment.mermaid
+%% ^^^^^^^^^^^^^ comment.line.percentage.mermaid
+
+sequenceDiagram
+%% <- meta.declaration.diagram.mermaid
+%% ^^^^^^^^^^^^ meta.declaration.diagram.mermaid keyword.declaration.trait.diagram.mermaid
+
+  autonumber
+%% ^^^^^^^^^ keyword.other.mermaid
+
+  participant A as Alice
+%% <- meta.declaration.actor.diagram.mermaid
+%% ^^^^^^^^^^ storage.type.interface.mermaid
+%%            ^ entity.name.actor.diagram.mermaid
+%%              ^^ keyword.context.resource.mermaid
+%%                 ^^^^^ string.unquoted.alias.actor.diagram.mermaid
+  participant B as Bob
+  participant C as Carol
+  Note left of A: Alice likes to chat
+%% <- meta.declaration.note.diagram.mermaid
+%% ^ keyword.type.note.diagram.mermaid
+%%     ^^^^^^^ constant.language.note.diagram.mermaid
+%%              ^ punctuation.separator.key-value.mermaid
+%%                ^^^^^^^^^^^^^^^^^^^ meta.declaration.note.diagram.mermaid
+  A->B: Hello Bob, how are you?
+%%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.message.diagram.mermaid
+%% ^^ keyword.operator.message.diagram.mermaid
+%%    ^ punctuation.separator.key-value.mermaid
+%%      ^^^^^^^^^^^^^^^^^^^^^^^ text.html.basic
+  loop Healthcheck
+%% <- meta.declaration.loop.diagram.mermaid
+%% ^ keyword.type.begin.loop.diagram.mermaid
+%%     ^ string.text.loop.diagram.mermaid
+    B->B: Bob checks himself...
+%% <- meta.declaration.message.diagram.mermaid
+%%   ^^ keyword.operator.message.diagram.mermaid
+%%      ^ punctuation.separator.key-value.mermaid
+%%        ^^^^^^^^^^^^^^^^^^^^^ text.html.basic
+  end
+%% <- meta.declaration.loop.diagram.mermaid
+%% ^ keyword.type.end.loop.diagram.mermaid
+  Note over B: Bob whispers when sick
+  alt is sick
+%% <- meta.declaration.alternative-path.diagram.mermaid
+%% ^^^^^^^^^^^ meta.declaration.alternative-path.diagram.mermaid
+%% ^^ keyword.control.conditional.if.mermaid
+%%    ^^^^^^^ string.unquoted.mermaid
+    B-->A: Not so good :(
+  else is well
+%% ^^^^^^^^^^^^ meta.declaration.alternative-path.diagram.mermaid
+%% ^^^ keyword.control.conditional.else.mermaid
+%%     ^^^^^^^ meta.alternative-path.diagram.mermaid string.unquoted.mermaid
+    B->A: Feeling fresh like a daisy
+  end
+%% <- meta.declaration.alternative-path.diagram.mermaid
+%% ^^ keyword.control.conditional.end.mermaid
+  opt Extra response
+%% <- meta.declaration.optional-path.diagram.mermaid
+%% ^ keyword.type.begin.optional-path.diagram.mermaid
+%%     ^ string.text.optional-path.diagram.mermaid
+    B->A: You, Alice?
+  end
+%% <- meta.declaration.optional-path.diagram.mermaid
+%% ^ keyword.type.end.optional-path.diagram.mermaid
+  Note right of C: Carol is the boss
+  C->>A: Get back to work!
+%% <- meta.declaration.message.diagram.mermaid
+%% ^^^ keyword.operator.message.diagram.mermaid
+%%     ^ punctuation.separator.key-value.mermaid
+%%       ^^^^^^^^^^^^^^^^^ text.html.basic
+  loop Every hour
+    A->>B: Request 1
+    activate B
+%% <- meta.declaration.activation.diagram.mermaid
+%%  ^ keyword.type.activation.diagram.mermaid
+    A-x+B: Request 2
+%% <- meta.declaration.message.diagram.mermaid
+%%   ^^^ keyword.operator.message.diagram.mermaid
+%%       ^ punctuation.separator.key-value.mermaid
+%%         ^^^^^^^^^ text.html.basic
+    B--x-A: Response 2
+%% <- meta.declaration.message.diagram.mermaid
+%%   ^^^^ keyword.operator.message.diagram.mermaid
+%%        ^ punctuation.separator.key-value.mermaid
+%%          ^^^^^^^^^^ text.html.basic
+    B-->>A: Response 1
+%% <- meta.declaration.message.diagram.mermaid
+%%   ^^^^ keyword.operator.message.diagram.mermaid
+%%        ^ punctuation.separator.key-value.mermaid
+%%          ^^^^^^^^^^ text.html.basic
+    deactivate B
+%% <- meta.declaration.activation.diagram.mermaid
+%%  ^ keyword.type.activation.diagram.mermaid
+
+    Note over A, B: some text<br /> here
+%%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.note.diagram.mermaid
+%%  ^^^^ keyword.type.note.diagram.mermaid
+%%       ^^^^ constant.language.note.diagram.mermaid
+%%            ^^^^ variable.parameter.mermaid
+%%                ^ punctuation.separator.key-value.mermaid
+%%                  ^^^^^^^^^^^^^^^^^^^^ text.html.basic
+%%                           ^ meta.tag.inline.any.html punctuation.definition.tag.begin.html
+  end
