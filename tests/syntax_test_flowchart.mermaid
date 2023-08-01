@@ -38,6 +38,13 @@ style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 
 classDef className fill:#f9f,stroke:#333,stroke-width:4px;
 class nodeId1 className
 class nodeId1,nodeId2 className;
+%% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.styling.graph.mermaid
+%%                             ^ punctuation.terminator.flowchart - support
+%% ^^ keyword.declaration.styling.graph.mermaid
+%%    ^^^^^^^ variable.parameter.flowchart
+%%           ^ punctuation.separator.sequence.flowchart - variable
+%%            ^^^^^^^ variable.parameter.flowchart
+%%                    ^^^^^^^^^ support.name.styling.graph.mermaid
 
 A[Hard edge] -->|Link text| B(Round edge)
 B --> C{Decision}
@@ -50,6 +57,7 @@ E --> F{Do we have all data<br />that we need?};
 F --> |Yes| G([Do something])
 
 subgraph example
+%% ^^^^^ meta.declaration.sub.graph.mermaid keyword.type.begin.sub.graph.mermaid
   
   markdown["`This **is** _Markdown_`"]
   newLines["`Line1

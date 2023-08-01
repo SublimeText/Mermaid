@@ -16,6 +16,11 @@ variables:
   # TODO: untested, test breaks, despite highlight working
   text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
 contexts:
+  prototype:
+    - meta_prepend: true
+    - match: ';'
+      scope: punctuation.terminator.flowchart
+
   main:
     - include: style
     - match: ^\s*(click)\s+{{entity}}\s+
@@ -72,16 +77,15 @@ contexts:
           pop: true
 
   style:
-    - match: ^\s*(class)\s+{{entity}}\s+
+    - match: ^\s*(class)\s+
       captures:
         1: keyword.declaration.styling.graph.mermaid
       push:
         - meta_scope: meta.declaration.styling.graph.mermaid
-        - match: \b\w+\b
-          scope: support.name.styling.graph.mermaid
         - match: $
           pop: true
-
+        - match: ''
+          push: class-expect-node-name
     - match: ^\s*(classDef)\s+({{entity}})\s+
       captures:
         1: keyword.declaration.styling.graph.mermaid
@@ -95,3 +99,22 @@ contexts:
         2: variable.parameter.graph.mermaid
       embed: scope:source.css.mermaid#property-list-content
       escape: $
+
+  class-expect-node-name:
+    - match: '{{entity}}'
+      scope: variable.parameter.flowchart
+    - match: \s
+      set: class-expect-class-name
+    - match: ','
+      scope: punctuation.separator.sequence.flowchart
+    - match: $
+      pop: true
+
+  class-expect-class-name:
+    - match: '{{entity}}'
+      scope: support.name.styling.graph.mermaid
+    - match: (?=;)
+      pop: 1
+    - match: $
+      pop: true
+
