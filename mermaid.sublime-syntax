@@ -9,19 +9,19 @@ scope: source.mermaid
 version: 2
 contexts:
   prototype:
-    - include: line_comment
+    - include: line-comment
 
   main:
+    # don't include the prototype so we can have preprocesor comments take precedence over normal ones
     - meta_include_prototype: false
-    - include: preprocessor_comments
-    - include: line_comment
+    - include: preprocessor-comments
+    - include: line-comment
+
     - match: <
       push:
         - meta_scope: punctuation.definition.comment.mermaid.html
         - match: $
           pop: true
-
-    - include: quoted_string
 
     - match: (?-i)^\s*(sequenceDiagram)\s+
       captures:
@@ -40,13 +40,13 @@ contexts:
         - match: $
           set: scope:source.mermaid.flowchart
 
-  preprocessor_comments:
+  preprocessor-comments:
     - match: '^\s*(%%)(?={)'
       captures:
         1: punctuation.definition.comment.mermaid
-      push: inside_preprocessor_comment
+      push: inside-preprocessor-comment
 
-  inside_preprocessor_comment:
+  inside-preprocessor-comment:
     - meta_scope: comment.line.percentage.mermaid
     - match: ''
       embed: scope:source.js
@@ -56,22 +56,24 @@ contexts:
       pop: 1
     #- match: '' # basis, bumpX, bumpY, cardinal, catmullRom, linear, monotoneX, monotoneY, natural, step, stepAfter, and stepBefore.
 
-  line_comment:
+  line-comment:
     - match: '^\s*(%%)'
       captures:
         1: punctuation.definition.comment.mermaid
-      push: inside_line_comment
+      push: inside-line-comment
 
-  inside_line_comment:
+  inside-line-comment:
     - meta_scope: comment.line.percentage.mermaid
     - match: $\n?
       pop: true
 
-  quoted_string:
+  quoted-string:
     - match: '"'
       scope: punctuation.definition.string.begin.mermaid
-      push:
-        - meta_scope: string.quoted.double.mermaid
-        - match: '"'
-          scope: punctuation.definition.string.end.mermaid
-          pop: true
+      push: inside-quoted-string
+
+  inside-quoted-string:
+    - meta_scope: string.quoted.double.mermaid
+    - match: '"'
+      scope: punctuation.definition.string.end.mermaid
+      pop: true

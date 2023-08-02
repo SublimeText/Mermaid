@@ -243,6 +243,11 @@ contexts:
 
   node-declaration-text:
     - meta_scope: meta.declaration.node.graph.mermaid
+    - include: quoted-string
+    - match: ''
+      push: unquoted-string
+
+  unquoted-string:
     - meta_content_scope: string.unquoted.node.graph.mermaid
     - match: ''
       push: scope:text.html.basic

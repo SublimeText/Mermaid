@@ -82,7 +82,7 @@ contexts:
         2: constant.language.note.diagram.mermaid
         3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
-      embed: note_text
+      embed: note-text
       embed_scope: meta.declaration.note.diagram.mermaid
       escape: $
 
@@ -93,7 +93,7 @@ contexts:
         2: keyword.operator.message.diagram.mermaid
         3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
-      embed: message_text
+      embed: message-text
       embed_scope: meta.declaration.message.diagram.mermaid
       escape: $
 
@@ -133,10 +133,10 @@ contexts:
       scope: keyword.context.block.mermaid
       pop: true
 
-  note_text:
+  note-text:
     - match: ''
       push: scope:text.html.basic
 
-  message_text:
+  message-text:
     - match: ''
       push: scope:text.html.basic

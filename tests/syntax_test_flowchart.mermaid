@@ -116,7 +116,11 @@ F --> |Yes| G([Do something])
 
 subgraph example
 %% ^^^^^ meta.declaration.sub.graph.mermaid keyword.type.begin.sub.graph.mermaid
-  
+  id["This ❤ Unicode"]
+%%   ^^^^^^^^^^^^^^^^ string.quoted.double.mermaid
+%%   ^ punctuation.definition.string.begin.mermaid
+%%                  ^ punctuation.definition.string.end.mermaid
+%%                   ^ keyword.operator.end.node.graph.mermaid
   markdown["`This **is** _Markdown_`"]
   newLines["`Line1
   Line 2
