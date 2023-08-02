@@ -122,20 +122,49 @@ subgraph example
 %%                  ^ punctuation.definition.string.end.mermaid
 %%                   ^ keyword.operator.end.node.graph.mermaid
   markdown["`This **is** _Markdown_`"]
+%%                                   ^ keyword.operator.end.node.graph.mermaid
   newLines["`Line1
   Line 2
   Line 3`"]
+%%        ^ keyword.operator.end.node.graph.mermaid
   markdown --> newLines
 
   id1[(Database)]
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^ keyword.operator.begin.node.graph.mermaid
+%%             ^^ keyword.operator.end.node.graph.mermaid
   id1[[This is the text in the box]]
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^ keyword.operator.begin.node.graph.mermaid
+%%                                ^^ keyword.operator.end.node.graph.mermaid
   id1((This is the text in the circle))
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^ keyword.operator.begin.node.graph.mermaid
+%%                                   ^^ keyword.operator.end.node.graph.mermaid
   id1>This is the text in the asymmetric box]
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^ keyword.operator.begin.node.graph.mermaid
+%%                                          ^ keyword.operator.end.node.graph.mermaid
   id1{This is the text in the rhombus}
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^ keyword.operator.begin.node.graph.mermaid
+%%                                   ^ keyword.operator.end.node.graph.mermaid
   id1{{This is the text in the hexagon}}
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^ keyword.operator.begin.node.graph.mermaid
+%%                                    ^^ keyword.operator.end.node.graph.mermaid
   A[/Trapezoid\]
+%%^ meta.node-name.mermaid variable.parameter.mermaid
+%% ^^ keyword.operator.begin.node.graph.mermaid
+%%            ^^ keyword.operator.end.node.graph.mermaid
   B[\Go shopping/]
+%%^ meta.node-name.mermaid variable.parameter.mermaid
+%% ^^ keyword.operator.begin.node.graph.mermaid
+%%              ^^ keyword.operator.end.node.graph.mermaid
   id1(((This is the text in the double circle)))
+%% ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%   ^^^ keyword.operator.begin.node.graph.mermaid
+%%                                           ^^^ keyword.operator.end.node.graph.mermaid
 
   A-- This is the text! ---B
   %%                    ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
