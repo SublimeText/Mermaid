@@ -9,9 +9,6 @@ variables:
   arrowhead: (?:[>xo])
   multi_direction_arrowhead: (?:[<xo]?)
   entity: \b[-\w]+\b
-  text: \b[-\w\s!?]+
-  # TODO: untested, test breaks, despite highlight working
-  text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
 contexts:
   prototype:
     - meta_prepend: true
@@ -183,33 +180,52 @@ contexts:
       scope: keyword.operator.link.graph.mermaid
       set:
         - node
-        - maybe-link-text
+        - maybe-explicit-pipe-link-text
     - match: |-
         (?x:
-          {{multi_direction_arrowhead}}--\s*{{text}}\s*(?:-{2,}{{arrowhead}})
-        |                              --\s*{{text}}\s*(?:-{3,})
-        | {{multi_direction_arrowhead}}==\s*{{text}}\s*(?:={2,}{{arrowhead}})
-        |                              ==\s*{{text}}\s*(?:={3,})
-        | {{multi_direction_arrowhead}}-\.\s*{{text}}\s*(?:\.+-{{arrowhead}})
+          {{multi_direction_arrowhead}}--(?!-)
+        | {{multi_direction_arrowhead}}==(?!=)
+        | {{multi_direction_arrowhead}}-\.
         )
-      scope: keyword.operator.link.graph.mermaid
+      scope: keyword.operator.link.begin.graph.mermaid
       set:
         - node
-        - maybe-link-text
+        - expect-link-end
     - match: $
       pop: 1
     - match: '&'
       scope: keyword.operator.flowchart
       set: node
 
-  maybe-link-text:
-    - match: (\|)\s*({{text}}|{{text_and_symbols}})\s*(\|)
-      captures:
-        1: keyword.operator.begin.text.link.graph.mermaid
-        2: string.unquoted.link.graph.mermaid
-        3: keyword.operator.end.text.link.graph.mermaid
-      pop: 1
+  maybe-explicit-pipe-link-text:
+    - match: \|
+      scope: keyword.operator.begin.text.link.graph.mermaid
+      set: explicit-pipe-link-text
     - match: $|(?=\S)
+      pop: 1
+
+  explicit-pipe-link-text:
+    - meta_content_scope: string.unquoted.link.graph.mermaid
+    - match: \|
+      scope: keyword.operator.end.text.link.graph.mermaid
+      pop: 1
+    - match: $
+      pop: 1
+
+  expect-link-end:
+    - meta_scope: meta.declaration.link.graph.mermaid
+    - meta_content_scope: string.unquoted.link.graph.mermaid
+    - match: |-
+        (?x:
+          (?:-{2,}{{arrowhead}})
+        | (?:-{3,})
+        | (?:={2,}{{arrowhead}})
+        | (?:={3,})
+        | (?:\.+-{{arrowhead}})
+        )
+      scope: keyword.operator.link.end.graph.mermaid
+      pop: 1
+    - match: $
       pop: 1
 
   style:

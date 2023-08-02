@@ -167,8 +167,8 @@ subgraph example
 %%                                           ^^^ keyword.operator.end.node.graph.mermaid
 
   A-- This is the text! ---B
-%% ^^ keyword.operator.link.graph.mermaid
-%%                      ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+%% ^^ keyword.operator.link.begin.graph.mermaid
+%%                      ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.end.graph.mermaid
 %%                         ^ meta.node-name.mermaid variable.parameter.mermaid
   A---|This is the text|B
   A-->|text|B
@@ -198,13 +198,14 @@ subgraph example
   C x--x D
 %%  ^^^^ keyword.operator.link.graph.mermaid
   A -. meanwhile .-o B;
-%%  ^^ keyword.operator.link.graph.mermaid
-%%               ^^^ keyword.operator.link.graph.mermaid
+%%  ^^ keyword.operator.link.begin.graph.mermaid
+%%               ^^^ keyword.operator.link.end.graph.mermaid
 %%                   ^ meta.node-name.mermaid variable.parameter.mermaid
 %%                    ^ punctuation.terminator.flowchart
   A o-. meanwhile .-o B;
-%%  ^^^ keyword.operator.link.graph.mermaid
-%%                ^^^ keyword.operator.link.graph.mermaid
+%%  ^^^ keyword.operator.link.begin.graph.mermaid
+%%      ^^^^^^^^^^ string.unquoted.link.graph.mermaid
+%%                ^^^ keyword.operator.link.end.graph.mermaid
 %%                    ^ meta.node-name.mermaid variable.parameter.mermaid
 %%                     ^ punctuation.terminator.flowchart
 
@@ -275,6 +276,12 @@ flowchart LR
 subgraph "One"
   a("`The **cat**
   in the hat`") -- "edge label" --> b{{"`The **dog** in the hog`"}}
+%% ^^^^^^^^^ string
+%%            ^ keyword.operator.end.node.graph.mermaid  
+%%              ^^ keyword.operator.link.begin.graph.mermaid
+%%                 ^^^^^^^^^^^^ string
+%%                              ^^^ source.mermaid.flowchart meta.declaration.sub.graph.mermaid meta.declaration.link.graph.mermaid 
+%%                                  ^ meta.node-name.mermaid variable.parameter.mermaid
 end
 subgraph "`**Two**`"
   c("`The **cat**
