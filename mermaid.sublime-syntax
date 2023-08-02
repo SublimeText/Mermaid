@@ -77,3 +77,13 @@ contexts:
     - match: '"'
       scope: punctuation.definition.string.end.mermaid
       pop: true
+    - match: (#)[0-9]{1,7}(;)
+      scope: constant.character.entity.decimal.mermaid
+      captures:
+        1: punctuation.definition.entity.mermaid
+        2: punctuation.terminator.entity.mermaid
+    - match: (#)[a-zA-Z0-9]+(;)
+      scope: constant.character.entity.named.mermaid
+      captures:
+        1: punctuation.definition.entity.mermaid
+        2: punctuation.terminator.entity.mermaid
