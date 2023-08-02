@@ -56,14 +56,6 @@ contexts:
       pop: 1
     #- match: '' # basis, bumpX, bumpY, cardinal, catmullRom, linear, monotoneX, monotoneY, natural, step, stepAfter, and stepBefore.
 
-  note_text:
-    - match: ''
-      push: scope:text.html.basic
-
-  message_text:
-    - match: ''
-      push: scope:text.html.basic
-
   line_comment:
     - match: '^\s*(%%)'
       captures:

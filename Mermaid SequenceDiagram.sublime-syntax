@@ -7,14 +7,9 @@ extends: Packages/Mermaid/mermaid.sublime-syntax
 version: 2
 variables:
   sequence_graph_link: (?:--?(?:>>|[>)x]))
-  other_graph_link: (?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)
-  graph_link: (?:{{sequence_graph_link}}|{{other_graph_link}})
   entity: \b[-\w]+\b
   entity_from: \b{{entity}}\s?
   entity_to: \s?{{entity}}\b
-  text: \b[-\w\s]+\b
-  # TODO: untested, test breaks, despite highlight working
-  text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
 contexts:
   main:
     - match: (?i)^\s*(participant|actor)\s+({{entity}})(?:\s+(as)\s+)?
@@ -87,7 +82,6 @@ contexts:
         2: constant.language.note.diagram.mermaid
         3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
-      #embed: scope:text.html.basic
       embed: note_text
       embed_scope: meta.declaration.note.diagram.mermaid
       escape: $
@@ -99,15 +93,9 @@ contexts:
         2: keyword.operator.message.diagram.mermaid
         3: meta.node-name.mermaid variable.parameter.mermaid
         4: punctuation.separator.key-value.mermaid
-      #embed: scope:text.html.basic
       embed: message_text
       embed_scope: meta.declaration.message.diagram.mermaid
       escape: $
-      # push:
-      #   - meta_scope: meta.declaration.message.diagram.mermaid
-      #   - meta_content_scope: string.unquoted.mermaid
-      #   - match: $
-      #     pop: true
 
     - match: (?i)^\s*(autonumber)\b
       scope: keyword.other.mermaid
@@ -144,3 +132,11 @@ contexts:
     - match: ^\s*end\b
       scope: keyword.context.block.mermaid
       pop: true
+
+  note_text:
+    - match: ''
+      push: scope:text.html.basic
+
+  message_text:
+    - match: ''
+      push: scope:text.html.basic

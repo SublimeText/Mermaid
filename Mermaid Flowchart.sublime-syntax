@@ -8,7 +8,7 @@ version: 2
 variables:
   graph_link: (?:(?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)|~~~)
   entity: \b[-\w]+\b
-  text: \b[-\w\s!]+
+  text: \b[-\w\s!?]+
   # TODO: untested, test breaks, despite highlight working
   text_and_symbols: \"[-!#$%\^&*+=?,./:'\\\w\s]+\"
 contexts:
