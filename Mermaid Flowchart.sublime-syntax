@@ -184,6 +184,9 @@ contexts:
         - maybe-link-text
     - match: $
       pop: 1
+    - match: '&'
+      scope: keyword.operator.flowchart
+      set: node
 
   maybe-link-text:
     - match: (\|)\s*({{text}}|{{text_and_symbols}})\s*(\|)

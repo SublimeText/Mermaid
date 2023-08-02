@@ -178,6 +178,13 @@ subgraph example
   A == text ==> B
   A -- text --> B -- text2 --> C
   a --> b & c--> d
+%%^ meta.node-name.mermaid variable.parameter.mermaid
+%%  ^^^ keyword.operator.link.graph.mermaid
+%%      ^ meta.node-name.mermaid variable.parameter.mermaid
+%%        ^ keyword.operator.flowchart
+%%          ^ meta.node-name.mermaid variable.parameter.mermaid
+%%           ^^^ keyword.operator.link.graph.mermaid
+%%               ^ meta.node-name.mermaid variable.parameter.mermaid
   A & B--> C & D
   A --o B
   B --x C
