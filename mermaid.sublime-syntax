@@ -36,6 +36,7 @@ contexts:
       push:
         - meta_scope: meta.declaration.graph.mermaid
         - include: graph-direction
+        - include: scope:source.mermaid.flowchart#prototype
         - match: $
           set: scope:source.mermaid.flowchart
 
