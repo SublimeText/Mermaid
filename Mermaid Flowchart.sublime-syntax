@@ -54,15 +54,91 @@ contexts:
       pop: 1
 
   maybe-node-declaration:
-    - match: '\[|\(+|\>|\{'
+    - match: \(\[ # stadium shaped
       scope: keyword.operator.begin.node.graph.mermaid
-      set:
-        - meta_scope: meta.declaration.node.graph.mermaid
-        - meta_content_scope: string.unquoted.node.graph.mermaid
-        - match: (\]|\)+|\})(?=\b|\s|$)
-          captures:
-            1: keyword.operator.end.node.graph.mermaid
-          set: maybe-graph-link
+      embed: node-declaration-text
+      escape: \]\)
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \[\[ # subroutine
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \]\]
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \[\( # cylindrical
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \)\]
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: '>' # asymmetric
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \]
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \{\{ # hexagon
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \}\}
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \[/ # Parallelogram or Trapezoid
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: '[/\\]\]'
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \[\\ # Parallelogram alt or Trapezoid alt
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: '[\\/]\]'
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \(\(\( # double circle
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \)\)\)
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \(\( # circle
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \)\)
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \( # round edges
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \)
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \[ # rectangular
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \]
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+    - match: \{ # rhombus
+      scope: keyword.operator.begin.node.graph.mermaid
+      embed: node-declaration-text
+      escape: \}
+      escape_captures:
+        0: meta.declaration.node.graph.mermaid keyword.operator.end.node.graph.mermaid
+      set: maybe-graph-link
+
     - match: ':::'
       scope: punctuation.accessor.double-colon.flowchart
       push: class-expect-class-name
@@ -110,7 +186,7 @@ contexts:
       pop: 1
 
   maybe-link-text:
-    - match: (\|)({{text}}|{{text_and_symbols}})(\|)
+    - match: (\|)\s*({{text}}|{{text_and_symbols}})\s*(\|)
       captures:
         1: keyword.operator.begin.text.link.graph.mermaid
         2: string.unquoted.link.graph.mermaid
@@ -165,3 +241,8 @@ contexts:
     - match: $
       pop: 1
 
+  node-declaration-text:
+    - meta_scope: meta.declaration.node.graph.mermaid
+    - meta_content_scope: string.unquoted.node.graph.mermaid
+    - match: ''
+      push: scope:text.html.basic

@@ -57,7 +57,7 @@ class nodeId1,nodeId2 className;
 %% ^ keyword.operator.begin.node.graph.mermaid
 %%  ^^^^^^^^^ string.unquoted.node.graph.mermaid
 %%           ^ keyword.operator.end.node.graph.mermaid
-%%            ^ - meta.declaration
+%%            ^ - meta.declaration.node
 %%             ^^^ keyword.operator.link.graph.mermaid
 %%                ^ keyword.operator.begin.text.link.graph.mermaid
 %%                 ^^^^^^^^^ string.unquoted.link.graph.mermaid
@@ -89,8 +89,30 @@ Start((Start)) ~~~ Something;
 %%                 ^^^^^^^^^ meta.node-name.mermaid variable.parameter.mermaid
 %%                          ^ punctuation.terminator.flowchart
 Something -..-> | Meanwhile | A;
+%% ^^^^^^meta.node-name.mermaid variable.parameter.mermaid
+%%        ^^^^^ keyword.operator.link.graph.mermaid
+%%              ^ keyword.operator.begin.text.link.graph.mermaid
+%%                ^^^^^^^^^^ string.unquoted.link.graph.mermaid
+%%                          ^ keyword.operator.end.text.link.graph.mermaid
+%%                            ^ meta.node-name.mermaid variable.parameter.mermaid
+%%                             ^ punctuation.terminator.flowchart
 E --> F{Do we have all data<br />that we need?};
+%% ^^ keyword.operator.link.graph.mermaid
+%%    ^ meta.node-name.mermaid variable.parameter.mermaid
+%%     ^ keyword.operator.begin.node.graph.mermaid
+%%      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.node.graph.mermaid string.unquoted.node.graph.mermaid text.html.basic
+%%                                            ^ keyword.operator.end.node.graph.mermaid - text.html - string
+%%                                             ^ punctuation.terminator.flowchart
+%%                          ^^ meta.tag.inline.any.html entity.name.tag.inline.any.html
 F --> |Yes| G([Do something])
+%% ^^ keyword.operator.link.graph.mermaid
+%%    ^ keyword.operator.begin.text.link.graph.mermaid
+%%     ^^^ string.unquoted.link.graph.mermaid
+%%        ^ keyword.operator.end.text.link.graph.mermaid
+%%          ^ meta.node-name.mermaid variable.parameter.mermaid
+%%           ^^ keyword.operator.begin.node.graph.mermaid
+%%             ^^^^^^^^^^^^ string.unquoted.node.graph.mermaid text.html.basic
+%%                         ^^ keyword.operator.end.node.graph.mermaid
 
 subgraph example
 %% ^^^^^ meta.declaration.sub.graph.mermaid keyword.type.begin.sub.graph.mermaid
