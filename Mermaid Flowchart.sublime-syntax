@@ -6,7 +6,7 @@ scope: source.mermaid.flowchart
 extends: Packages/Mermaid/mermaid.sublime-syntax
 version: 2
 variables:
-  graph_link: (?:(?:-?-(?:-|\>)|=?=(?:=|\>)|(?:\.-|-\.)-?\>?)|~~~)
+  arrowhead: (?:[>xo])
   entity: \b[-\w]+\b
   text: \b[-\w\s!?]+
   # TODO: untested, test breaks, despite highlight working
@@ -159,11 +159,11 @@ contexts:
     # Dotted with arrow -.->  -..-> -...->
     - match: |-
         (?x:
-          (?:-{2,}>)
+          (?:-{2,}{{arrowhead}})
         | (?:-{3,})
-        | (?:={2,}>)
+        | (?:={2,}{{arrowhead}})
         | (?:={3,})
-        | (?:-\.+->?)
+        | (?:-\.+-{{arrowhead}}?)
         | (?:~{3,})
         )
       scope: keyword.operator.link.graph.mermaid
@@ -172,11 +172,11 @@ contexts:
         - maybe-link-text
     - match: |-
         (?x:
-          (?:--)\s*{{text}}\s*(?:-{2,}>)
+          (?:--)\s*{{text}}\s*(?:-{2,}{{arrowhead}})
         | (?:--)\s*{{text}}\s*(?:-{3,})
-        | (?:==)\s*{{text}}\s*(?:={2,}>)
+        | (?:==)\s*{{text}}\s*(?:={2,}{{arrowhead}})
         | (?:==)\s*{{text}}\s*(?:={3,})
-        | (?:-\.)\s*{{text}}\s*(?:\.+->)
+        | (?:-\.)\s*{{text}}\s*(?:\.+-{{arrowhead}})
         )
       scope: keyword.operator.link.graph.mermaid
       set:
@@ -195,11 +195,6 @@ contexts:
         2: string.unquoted.link.graph.mermaid
         3: keyword.operator.end.text.link.graph.mermaid
       pop: 1
-    # - match: ({{text}}|{{text_and_symbols}})\s?({{graph_link}})
-    #   captures:
-    #     1: string.unquoted.link.graph.mermaid
-    #     2: keyword.operator.link.graph.mermaid
-    #   pop: 1
     - match: $|(?=\S)
       pop: 1
 
