@@ -7,6 +7,7 @@ extends: Packages/Mermaid/mermaid.sublime-syntax
 version: 2
 variables:
   arrowhead: (?:[>xo])
+  multi_direction_arrowhead: (?:[<xo]?)
   entity: \b[-\w]+\b
   text: \b[-\w\s!?]+
   # TODO: untested, test breaks, despite highlight working
@@ -19,16 +20,21 @@ contexts:
 
   main:
     - include: style
-    - match: ^\s*(click)\s+{{entity}}\s+
+    - match: ^\s*(click)\s+
       captures:
         1: keyword.type.interaction.graph.mermaid
       push:
         - meta_scope: meta.declaration.interaction.graph.mermaid
-        - match: \b\w+\b
-          scope: entity.name.callback.interaction.graph.mermaid
-        - include: quoted_string
+        - match: '{{entity}}'
+          scope: meta.node-name.mermaid variable.parameter.mermaid
+          push:
+            - match: '{{entity}}'
+              scope: entity.name.callback.interaction.graph.mermaid
+            - include: quoted-string
+            - match: $
+              pop: 1
         - match: $
-          pop: true
+          pop: 1
 
     - match: ^\s*(subgraph)\s+(.*)$
       captures:
@@ -36,10 +42,18 @@ contexts:
         2: string.unquoted.sub.graph.mermaid
       push:
         - meta_scope: meta.declaration.sub.graph.mermaid
+        - match: ^\s*(direction)\b
+          captures:
+            1: keyword.other.flowchart
+          push:
+            - include: graph-direction
+            - match: $
+              pop: 1
+        - match: ^\s*(end)\b
+          captures:
+            1: keyword.type.end.sub.graph.mermaid
+          pop: 1
         - include: main
-        - match: ^\s*end\b
-          scope: keyword.type.end.sub.graph.mermaid
-          pop: true
 
     - match: ^\s*(?={{entity}})
       push:
@@ -159,11 +173,11 @@ contexts:
     # Dotted with arrow -.->  -..-> -...->
     - match: |-
         (?x:
-          (?:-{2,}{{arrowhead}})
-        | (?:-{3,})
-        | (?:={2,}{{arrowhead}})
+          (?:{{multi_direction_arrowhead}}-{2,}{{arrowhead}})
+        | (?:                             -{3,})
+        | (?:{{multi_direction_arrowhead}}={2,}{{arrowhead}})
         | (?:={3,})
-        | (?:-\.+-{{arrowhead}}?)
+        | (?:{{multi_direction_arrowhead}}-\.+-{{arrowhead}}?)
         | (?:~{3,})
         )
       scope: keyword.operator.link.graph.mermaid
@@ -172,11 +186,11 @@ contexts:
         - maybe-link-text
     - match: |-
         (?x:
-          (?:--)\s*{{text}}\s*(?:-{2,}{{arrowhead}})
-        | (?:--)\s*{{text}}\s*(?:-{3,})
-        | (?:==)\s*{{text}}\s*(?:={2,}{{arrowhead}})
-        | (?:==)\s*{{text}}\s*(?:={3,})
-        | (?:-\.)\s*{{text}}\s*(?:\.+-{{arrowhead}})
+          {{multi_direction_arrowhead}}--\s*{{text}}\s*(?:-{2,}{{arrowhead}})
+        |                              --\s*{{text}}\s*(?:-{3,})
+        | {{multi_direction_arrowhead}}==\s*{{text}}\s*(?:={2,}{{arrowhead}})
+        |                              ==\s*{{text}}\s*(?:={3,})
+        | {{multi_direction_arrowhead}}-\.\s*{{text}}\s*(?:\.+-{{arrowhead}})
         )
       scope: keyword.operator.link.graph.mermaid
       set:

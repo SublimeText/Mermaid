@@ -167,8 +167,9 @@ subgraph example
 %%                                           ^^^ keyword.operator.end.node.graph.mermaid
 
   A-- This is the text! ---B
-  %%                    ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
-  %%                       ^ meta.node-name.mermaid variable.parameter.mermaid
+%% ^^ keyword.operator.link.graph.mermaid
+%%                      ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+%%                         ^ meta.node-name.mermaid variable.parameter.mermaid
   A---|This is the text|B
   A-->|text|B
   A-- text -->B
@@ -191,8 +192,21 @@ subgraph example
   B --x C
 %%  ^^^ keyword.operator.link.graph.mermaid
   A o--o B
+%%  ^^^^ keyword.operator.link.graph.mermaid
   B <--> C
+%%  ^^^^ keyword.operator.link.graph.mermaid
   C x--x D
+%%  ^^^^ keyword.operator.link.graph.mermaid
+  A -. meanwhile .-o B;
+%%  ^^ keyword.operator.link.graph.mermaid
+%%               ^^^ keyword.operator.link.graph.mermaid
+%%                   ^ meta.node-name.mermaid variable.parameter.mermaid
+%%                    ^ punctuation.terminator.flowchart
+  A o-. meanwhile .-o B;
+%%  ^^^ keyword.operator.link.graph.mermaid
+%%                ^^^ keyword.operator.link.graph.mermaid
+%%                    ^ meta.node-name.mermaid variable.parameter.mermaid
+%%                     ^ punctuation.terminator.flowchart
 
 end
 
@@ -235,10 +249,19 @@ flowchart TB
 flowchart LR
   subgraph TOP
     direction TB
+%%  ^^^^^^^^^ keyword.other.flowchart
+%%            ^^ constant.language.graph-direction.mermaid
     subgraph B1
+%%  ^^^^^^^^ keyword.type.begin.sub.graph.mermaid
         direction RL
+%%      ^^^^^^^^^ keyword.other.flowchart
+%%                ^^ constant.language.graph-direction.mermaid
         i1 -->f1
+%%      ^^ meta.node-name.mermaid variable.parameter.mermaid
+%%         ^^^ meta.declaration.link.graph.mermaid keyword.operator.link.graph.mermaid
+%%            ^^ meta.node-name.mermaid variable.parameter.mermaid
     end
+%%  ^^^ keyword.type.end.sub.graph.mermaid
     subgraph B2
         direction BT
         i2 -->f2
@@ -263,7 +286,19 @@ flowchart LR
     B-->C
     C-->D
     click A callback "Tooltip for a callback"
+%%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.interaction.graph.mermaid
+%%  ^^^^^ keyword.type.interaction.graph.mermaid
+%%        ^ meta.node-name.mermaid variable.parameter.mermaid
+%%          ^^^^^^^^ entity.name.callback.interaction.graph.mermaid
+%%                   ^ string.quoted.double.mermaid punctuation.definition.string.begin.mermaid
+%%                    ^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.mermaid
+%%                                          ^ string.quoted.double.mermaid punctuation.definition.string.end.mermaid
     click B "https://www.github.com" "This is a tooltip for a link"
+%%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.declaration.interaction.graph.mermaid
+%%  ^^^^^ keyword.type.interaction.graph.mermaid
+%%        ^ meta.node-name.mermaid variable.parameter.mermaid
+%%          ^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.mermaid
+%%                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ string.quoted.double.mermaid
     click A call callback() "Tooltip for a callback"
     click B href "https://www.github.com" "This is a tooltip for a link"
 

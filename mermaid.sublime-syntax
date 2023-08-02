@@ -35,10 +35,13 @@ contexts:
         1: keyword.declaration.graph.mermaid
       push:
         - meta_scope: meta.declaration.graph.mermaid
-        - match: \b(?:T[BD]|BT|LR|RL)\b
-          scope: constant.language.graph-direction.mermaid
+        - include: graph-direction
         - match: $
           set: scope:source.mermaid.flowchart
+
+  graph-direction:
+    - match: \b(?:T[BD]|BT|LR|RL)\b
+      scope: constant.language.graph-direction.mermaid
 
   preprocessor-comments:
     - match: '^\s*(%%)(?={)'
