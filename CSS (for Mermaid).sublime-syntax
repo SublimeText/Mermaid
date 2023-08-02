@@ -14,10 +14,3 @@ contexts:
     - meta_prepend: true
     - match: (?=,)
       pop: true
-
-  inside-property-list:
-    # depending on the version of ST (syntax packages) being used,
-    # the context may have a different name
-    # so we include them both here for backwards/forwards compatibility
-    - include: property-list-content
-    - include: property-list-body

@@ -242,7 +242,7 @@ contexts:
       captures:
         1: keyword.declaration.styling.graph.mermaid
         2: entity.name.constant.styling.graph.mermaid
-      embed: scope:source.css.mermaid#inside-property-list
+      embed: scope:source.css.mermaid#property-list-body
       escape: $
 
     - match: ^\s*(style)\s+({{entity}})\s+
